@@ -54,6 +54,9 @@ public abstract class Logger {
 
     abstract public LogLevel getLogLevel();
 
+    public boolean isDebugEnabled() {
+        return getLogLevel().isLogTarget(LogLevel.DEBUG);
+    }
 
     //<editor-fold desc="// Getter&Setter">
     public static LoggerFactory getLoggerFactory() {
