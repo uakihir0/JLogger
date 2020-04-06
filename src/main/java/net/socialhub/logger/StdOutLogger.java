@@ -18,8 +18,23 @@ public class StdOutLogger extends Logger {
     private Logger.LogLevel logLevel = LogLevel.DEBUG;
 
     @Override
+    public void trace(String message, Throwable th) {
+        print(message, th, LogLevel.TRACE);
+    }
+
+    @Override
+    public void trace(String message, Object... args) {
+        print(message, args, LogLevel.TRACE);
+    }
+
+    @Override
     public void debug(String message, Throwable th) {
         print(message, th, LogLevel.DEBUG);
+    }
+
+    @Override
+    public void debug(String message, Object... args) {
+        print(message, args, LogLevel.DEBUG);
     }
 
     @Override
@@ -28,13 +43,28 @@ public class StdOutLogger extends Logger {
     }
 
     @Override
+    public void info(String message, Object... args) {
+        print(message, args, LogLevel.INFO);
+    }
+
+    @Override
     public void warn(String message, Throwable th) {
         print(message, th, LogLevel.WARN);
     }
 
     @Override
+    public void warn(String message, Object... args) {
+        print(message, args, LogLevel.WARN);
+    }
+
+    @Override
     public void error(String message, Throwable th) {
         print(message, th, LogLevel.ERROR);
+    }
+
+    @Override
+    public void error(String message, Object... args) {
+        print(message, args, LogLevel.ERROR);
     }
 
     private void print(String message, Throwable th, LogLevel logLevel) {
@@ -48,6 +78,18 @@ public class StdOutLogger extends Logger {
             if (th != null) {
                 th.printStackTrace();
             }
+        }
+    }
+
+    private void print(String message, Object[] args, LogLevel logLevel) {
+        if (this.logLevel.isLogTarget(logLevel)) {
+            System.out.print("[" + logLevel.name() + "]");
+
+            String text = message;
+            for (Object arg : args) {
+                text = text.replace("{}", arg.toString());
+            }
+            System.out.println(text);
         }
     }
 

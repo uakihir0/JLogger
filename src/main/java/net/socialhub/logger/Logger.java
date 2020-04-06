@@ -29,7 +29,9 @@ public abstract class Logger {
         ERROR(),
         WARN(ERROR),
         INFO(WARN, ERROR),
-        DEBUG(INFO, WARN, ERROR);
+        DEBUG(INFO, WARN, ERROR),
+        TRACE(DEBUG, INFO, WARN, ERROR),
+        ;
 
         private List<LogLevel> levels;
 
@@ -42,20 +44,72 @@ public abstract class Logger {
         }
     }
 
+    // ----------------- //
+    // Trace
+    // ----------------- //
+
+    abstract public void trace(String message, Throwable th);
+
+    abstract public void trace(String message, Object... args);
+
+    // ----------------- //
+    // Debug
+    // ----------------- //
+
     abstract public void debug(String message, Throwable th);
+
+    abstract public void debug(String message, Object... args);
+
+    // ----------------- //
+    // Info
+    // ----------------- //
 
     abstract public void info(String message, Throwable th);
 
+    abstract public void info(String message, Object... args);
+
+    // ----------------- //
+    // Warn
+    // ----------------- //
+
     abstract public void warn(String message, Throwable th);
 
+    abstract public void warn(String message, Object... args);
+
+    // ----------------- //
+    // Error
+    // ----------------- //
+
     abstract public void error(String message, Throwable th);
+
+    abstract public void error(String message, Object... args);
+
+    // ----------------- //
+    // Set Level
+    // ----------------- //
 
     abstract public void setLogLevel(LogLevel logLevel);
 
     abstract public LogLevel getLogLevel();
 
+    public boolean isTraceEnabled() {
+        return getLogLevel().isLogTarget(LogLevel.TRACE);
+    }
+
     public boolean isDebugEnabled() {
         return getLogLevel().isLogTarget(LogLevel.DEBUG);
+    }
+
+    public boolean isInfoEnabled() {
+        return getLogLevel().isLogTarget(LogLevel.INFO);
+    }
+
+    public boolean isWarnEnabled() {
+        return getLogLevel().isLogTarget(LogLevel.WARN);
+    }
+
+    public boolean isErrorEnabled() {
+        return getLogLevel().isLogTarget(LogLevel.ERROR);
     }
 
     //<editor-fold desc="// Getter&Setter">
@@ -69,8 +123,16 @@ public abstract class Logger {
     //</editor-fold>
 
     //<editor-fold desc="// Other interfaces">
+    public void trace(String message) {
+        trace(message, (Throwable) null);
+    }
+
+    public void trace(Throwable th) {
+        trace("", th);
+    }
+
     public void debug(String message) {
-        debug(message, null);
+        debug(message, (Throwable) null);
     }
 
     public void debug(Throwable th) {
@@ -78,7 +140,7 @@ public abstract class Logger {
     }
 
     public void info(String message) {
-        info(message, null);
+        info(message, (Throwable) null);
     }
 
     public void info(Throwable th) {
@@ -86,7 +148,7 @@ public abstract class Logger {
     }
 
     public void warn(String message) {
-        warn(message, null);
+        warn(message, (Throwable) null);
     }
 
     public void warn(Throwable th) {
@@ -94,7 +156,7 @@ public abstract class Logger {
     }
 
     public void error(String message) {
-        error(message, null);
+        error(message, (Throwable) null);
     }
 
     public void error(Throwable th) {
