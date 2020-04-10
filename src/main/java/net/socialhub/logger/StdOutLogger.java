@@ -87,7 +87,7 @@ public class StdOutLogger extends Logger {
 
             String text = message;
             for (Object arg : args) {
-                text = text.replace("{}", arg.toString());
+                text = text.replaceFirst("\\{\\}", arg.toString());
             }
             System.out.println(text);
         }
